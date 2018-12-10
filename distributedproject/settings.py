@@ -79,9 +79,29 @@ WSGI_APPLICATION = 'distributedproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'master2',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+    },
+    # 'db2':{
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'repl1',
+    #     'USER': 'gary',
+    #     'PASSWORD': 'garygary',
+    #     'HOST': '',
+    #     'PORT': '',
+    # },
+    # 'db3':{
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'repl2',
+    #     'USER': 'gary',
+    #     'PASSWORD': 'garygary',
+    #     'HOST': '',
+    #     'PORT': '',
+    # }
 }
 
 
@@ -107,7 +127,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'fi-fi'
+LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Europe/Helsinki'
 
@@ -126,3 +146,6 @@ STATICFILES_DIRS = (
 )
 # print("static path", os.path.join(BASE_DIR, "distributedproject", "static"))
 STATIC_URL = '/static/'
+
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/login/"
