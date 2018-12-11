@@ -28,7 +28,7 @@ SECRET_KEY = 'whm)e&e^v1d3%$wuf9^qx0ed0o4odr%$0z0@9uhl^&=bqd6a75'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['35.228.51.137']
 
 
 # Application definition
@@ -77,32 +77,9 @@ WSGI_APPLICATION = 'distributedproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'master2',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-    },
-    # 'db2':{
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'repl1',
-    #     'USER': 'gary',
-    #     'PASSWORD': 'garygary',
-    #     'HOST': '',
-    #     'PORT': '',
-    # },
-    # 'db3':{
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'repl2',
-    #     'USER': 'gary',
-    #     'PASSWORD': 'garygary',
-    #     'HOST': '',
-    #     'PORT': '',
-    # }
-}
+# Database settings are loaded from local_settings
+DATABASE_ROUTERS = []
+DATABASES = {}
 
 
 # Password validation
@@ -146,6 +123,14 @@ STATICFILES_DIRS = (
 )
 # print("static path", os.path.join(BASE_DIR, "distributedproject", "static"))
 STATIC_URL = '/static/'
+STATIC_ROOT = 'static_files/'
 
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/login/"
+
+try:
+    exec(open(os.path.join(
+        os.path.dirname(__file__), "local_settings.py"
+    )).read())
+except Exception as e:
+    print(e)
