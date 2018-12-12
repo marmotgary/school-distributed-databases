@@ -22,7 +22,11 @@ app.controller('AppController', function($scope, $http){
   })
 
   $scope.filterProducts = function(id) {
-    $scope.activeCategory = id;
+    if(id === undefined){
+      $scope.activeCategory = -1;
+    }else{
+      $scope.activeCategory = id;
+    }
     $http({
       url: "api/product/",
       method: "GET",
