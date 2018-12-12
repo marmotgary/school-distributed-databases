@@ -28,7 +28,7 @@ SECRET_KEY = 'whm)e&e^v1d3%$wuf9^qx0ed0o4odr%$0z0@9uhl^&=bqd6a75'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['35.228.51.137', 'makeupshop.rauko.la']
+ALLOWED_HOSTS = ['35.228.51.137', 'makeupshop.rauko.la', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

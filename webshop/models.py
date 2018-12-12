@@ -20,6 +20,7 @@ class Category(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=128)
+    description = models.CharField(max_length=1000, default="Description")
     category = models.ForeignKey(Category)
     stock = models.IntegerField(default=0)
     price = models.DecimalField(max_digits=7, decimal_places=2)
