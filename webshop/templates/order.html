@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Order {% endblock %}
+
+{% block content %}
+<div ng-app="indexApp" ng-controller="OrderController">
+  <div class="col-lg-8">
+    <h1 class="my-4">Orders</h1>
+    <ul ng-cloak class="list-group">
+      <li ng-repeat="order in orders" class="list-group-item">{$ order.ordered_date $}<p class="float-right">{$ order.total_price $}€</p></li>
+    </ul>
+  </div>
+  <!-- <div ng-repeat="product in products" class="card col-lg-7 mb-1">
+    <div ng-cloak class="card-body">
+      <h5 class="card-title mb-0">{$ product.name $}</h5>
+      <p class="card-text">{$ product.description $}</p>
+      <h4 class="text-danger mb-0">{$ product.totalPrice $}€</h4>
+      <p class="text-secondary mb-0">{$ product.inCart $} x {$ product.price $}€</p>
+      <p class="card-text float-right">Stock: {$ product.stock $}</p>
+    </div> -->
+</div>
+{% endblock %}

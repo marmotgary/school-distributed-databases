@@ -13,6 +13,7 @@ class Account(User):
 
 class Order(models.Model):
     user = models.ForeignKey(Account)
+    total_price = models.DecimalField(max_digits=7, decimal_places=2, default=0)
     ordered_date = models.DateField(auto_now_add=True)
 
 class Category(models.Model):

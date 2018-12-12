@@ -8,25 +8,22 @@
   <div class="col-lg-8">
     <h1 class="my-4">Shopping cart</h1>
   </div>
-  <div class="row d-flex justify-content-center">
+  <div ng-cloak class="row d-flex justify-content-center">
     <div ng-repeat="product in products" class="card col-lg-7 mb-1">
-      <div  class="card-body">
+      <div ng-cloak class="card-body">
         <h5 class="card-title mb-0">{$ product.name $}</h5>
         <p class="card-text">{$ product.description $}</p>
         <h4 class="text-danger mb-0">{$ product.totalPrice $}€</h4>
         <p class="text-secondary mb-0">{$ product.inCart $} x {$ product.price $}€</p>
-        <p class="card-text">Stock: {$ product.stock $}</p>
+        <p class="card-text float-right">Stock: {$ product.stock $}</p>
       </div>
     </div>
     <div class="card col-lg-7 mb-1 border-primary">
-      <div class="card-header">
-        Total
-      </div>
-      <div class="card-body">
+      <div ng-cloak class="card-body">
         <h5 class="card-title mb-0">In total</h5>
         <h4 class="text-danger mb-0">{$ grandTotal $}€</h4>
-        <p class="card-text">Account balance: {$ accountBalance $}</p>
-        <button ng-disabled="!sufficientFunds" class="btn btn-primary">Buy</button>
+        <p class="card-text">Account balance: {$ accountBalance $}€</p>
+        <button ng-disabled="!sufficientFunds || products.length == 0" ng-click="buy()" class="btn btn-primary">Buy</button>
       </div>
     </div>
   </div>

@@ -1,9 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<script>
-  const CSRF_TOKEN = "{{csrf_token}}"
-</script>
 <!-- Page Content -->
   <div ng-app="indexApp" ng-controller="AppController" class="row">
 
@@ -56,11 +53,11 @@
               <h4 class="card-title">
                 <p>{$ product.name $}</p>
               </h4>
-              <h5>${$ product.price $}</h5>
+              <h5 class="text-danger">${$ product.price $}</h5>
               <p class="card-text">{$ product.description $}</p>
               <p class="card-text">Stock: {$ product.stock $}</p>
               {% if user.is_authenticated %}
-              <a href="" class="card-text" ng-click="addToCart(product.id)">Add to cart</a>
+              <a ng-if="product.stock > 0" href="" class="card-text" ng-click="addToCart(product.id)">Add to cart</a>
               {% endif %}
             </div>
             <!-- <div class="card-footer">

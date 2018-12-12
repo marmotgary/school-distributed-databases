@@ -47,7 +47,7 @@ app.controller('AppController', function($scope, $http){
     $http({
       url: "/api/cart/",
       method: "POST",
-      data: {"productId": id},
+      data: {"productId": id, "tag": "addCart"},
       headers: {"X-CSRFToken": CSRF_TOKEN}
     }).then(function successCallback(response) {
       if(response.data.success === true) {
@@ -59,17 +59,54 @@ app.controller('AppController', function($scope, $http){
   }
 });
 
-app.controller('CartController', function($scope, $http){
-  $http.get('/api/cart/').then(function successCallback(response){
-    let tempProducts = [];
-    angular.forEach(response.data.products, function(item) {
-        tempProducts.push(item)
+app.controller('CartController', function($scope, $http, $window){
+
+  $scope.getCart = function() {
+    $http.get('/api/cart/').then(function successCallback(response){
+      let tempProducts = [];
+      angular.forEach(response.data.products, function(item) {
+          tempProducts.push(item)
+      })
+      $scope.products = tempProducts;
+      $scope.grandTotal = response.data.balance.grandTotal;
+      $scope.balanceAfterPurchase = response.data.balance.balanceAfterPurchase;
+      $scope.sufficientFunds = response.data.balance.sufficientFunds;
+      $scope.accountBalance = response.data.balance.accountBalance;
+    }, function errorCallback(response) {
+      if(response.status === 403){
+        $window.location.href = '/login/';
+      }
     })
-    $scope.products = tempProducts;
-    $scope.grandTotal = response.data.balance.grandTotal;
-    $scope.balanceAfterPurchase = response.data.balance.balanceAfterPurchase;
-    $scope.sufficientFunds = response.data.balance.sufficientFunds;
-    $scope.accountBalance = response.data.balance.accountBalance;
+  }
+
+  $scope.buy = function(){
+    $http({
+      url: "/api/cart/",
+      method: "POST",
+      data: {"tag": "buy"},
+      headers: {"X-CSRFToken": CSRF_TOKEN}
+    }).then(function successCallback(response) {
+      if(response.data.success === true) {
+        toastr.success("Purchase successfull!")
+      }else{
+        if(response.data.status == "not_in_stock"){
+          toastr.error("Items not in stock!")
+        }else if(response.data.status == "no_items_cart"){
+          toastr.warning("The shopping cart is empty!")
+        }
+      }
+      $scope.getCart();
+    })
+  }
+
+  $scope.getCart();
+});
+
+app.controller('OrderController', function($scope, $http){
+
+  $http.get('/api/order/').then(function successCallback(response){
+    console.log(response);
+    $scope.orders = response.data
   }, function errorCallback(response) {
     error.log(response);
   })
