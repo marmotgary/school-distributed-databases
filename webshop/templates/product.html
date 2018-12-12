@@ -5,7 +5,7 @@
 
 {% block content %}
 
-<div class="row">
+<div class="row" ng-controller="ProductController">
 
   <div class="col-lg-3">
 
@@ -20,15 +20,15 @@
     <div class="col-md-1"></div>
 
     <div class="col-md-6">
-    <h1>Product</h1>
+    <h1>{$ product.name $}</h1>
      <div class="thumbnail">
             <img src="http://placehold.it/320x150" alt="">
             <div class="caption col-xs-6">
-                <p>Description</p>
+                <p>{$ product.description $}</p>
             </div>
             <ul class="list-group pull-right col-xs-6" style="margin-top:15px;">
                 {% csrf_token %}
-                <li class="list-group-item">Finland <span stlye="font-weight:bold"> x EUR </span> Stock: y <span onclick="" class="glyphicon glyphicon-shopping-cart pull-right"></span></li>
+                <li class="list-group-item">Finland <span stlye="font-weight:bold"> {$ product.price $}€ </span> Stock: {$ product.stock $} <span onclick="" class="glyphicon glyphicon-shopping-cart pull-right"></span></li>
 
             </ul>
 

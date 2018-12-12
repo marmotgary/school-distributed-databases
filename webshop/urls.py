@@ -9,10 +9,12 @@ router.register(r'product', views.ProductViewSet)
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^product/$', views.product, name='product'),
+    url(r'^cart/$', views.cart, name='cart'),
     url(r'^signup/$', views.SignUp.as_view(), name='signup'),
     url('^', include('django.contrib.auth.urls')),
     url('^api/', include(router.urls)),
-    url('^api/categoryproducts/', views.GetProductsByCategory),    
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api/cart/$', views.Cart.as_view(), name='api_cart'),
+
 
 ]

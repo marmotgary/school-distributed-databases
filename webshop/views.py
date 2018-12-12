@@ -7,6 +7,8 @@ from django.contrib.auth import logout
 from .forms import SignupForm
 from .models import *
 from .serializers import *
+from decimal import *
+import json
 
 # DRF
 from rest_framework import viewsets, permissions
@@ -19,6 +21,9 @@ def index(request):
 def product(request):
     return render(request, 'product.html')
 
+def cart(request):
+    return render(request, 'cart.html')
+
 class SignUp(generic.CreateView):
     form_class = SignupForm
     success_url = reverse_lazy('index')
@@ -28,15 +33,6 @@ class Login(generic.CreateView):
     form_class = SignupForm
     success_url = reverse_lazy('index')
     template_name = 'signup.html'
-
-# class BaseViewSet ( viewsets . ModelViewSet ):
-#     permission_classes = [permissions.IsAuthenticated, permissions.IsOwnerOrReadOnly]
-#
-#     def get_queryset(self):
-#         qs = self.queryset.filter(owner=self.request.user)
-#         return qs
-#     def perform_create(self, serializer):
-#         serializer.save(owner = self.request.user)
 
 class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
@@ -54,7 +50,53 @@ class ProductViewSet(viewsets.ModelViewSet):
             queryset = Product.objects.filter(category_id=category_id)
         return queryset
 
-class GetProductsByCategory(APIView):
+
+class Cart(APIView):
+    def post(self, request, format=None):
+        productId = request.data['productId']
+        try:
+            product = Product.objects.get(id=productId)
+            # For whatever reason using int keys with dictionary saved to session caused problems. => using str instead.
+            productId = str(productId)
+            cart = request.session.get('cart', {})
+            if productId in cart:
+                cart[productId] += 1
+            else:
+                cart[productId] = 1
+            request.session['cart'] = cart
+
+            success = True
+        except Exception as e:
+            print("Exception", e)
+            success = False
+        print("success: ", success)
+        return HttpResponse(json.dumps({'success': success}))
 
     def get(self, request, format=None):
-        return Response({"Test"})
+        cart = request.session.get('cart', {})
+        ids = cart.keys()
+        queryset = Product.objects.filter(pk__in=ids)
+        serializer = ProductSerializer(queryset, many=True)
+        data = serializer.data
+        grandTotal = 0
+        for product in data:
+            qty = cart[str(product['id'])]
+            product['inCart'] = qty
+            totalPrice = Decimal(product['price']) * qty
+            product['totalPrice'] = str(totalPrice)
+            grandTotal += totalPrice
+
+        account = Account.objects.get(id=request.user.id)
+        accountBalance = account.balance
+        sufficientFunds = accountBalance > grandTotal
+        balanceAfterPurchase = accountBalance - grandTotal
+        balance = {
+            "accountBalance": str(accountBalance),
+            "grandTotal": str(grandTotal),
+            'sufficientFunds': sufficientFunds,
+            'balanceAfterPurchase': str(balanceAfterPurchase)
+        }
+
+        message = {"products": data, "balance": balance}
+        return HttpResponse(json.dumps(message))
+        # return HttpResponse(json.dumps(message))

@@ -7,14 +7,14 @@ class PrimaryReplicaRouter(object):
         Reads go to a randomly-chosen replica.
         """
         db = random.choice(['primary', 'replica'])
-        print("reading", db)
+        # print("reading", db)
         return db
 
     def db_for_write(self, model, **hints):
         """
         Writes always go to primary.
         """
-        print("writing")
+        # print("writing")
         return 'primary'
 
     def allow_relation(self, obj1, obj2, **hints):
